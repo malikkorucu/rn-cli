@@ -1,0 +1,35 @@
+{
+  "name": "clear",
+  "version": "1.0.0",
+  "description": "React Native CLI",
+  "bin": {
+    "create-project": "bin/create-project",
+    "a": "bin/create-project"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "udpate": "npm unlink && npm link"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malikkorucu/rn-cli.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/malikkorucu/rn-cli/issues"
+  },
+  "homepage": "https://github.com/malikkorucu/rn-cli#readme",
+  "dependencies": {
+    "arg": "^5.0.1",
+    "chalk": "^5.0.0",
+    "colors": "^1.4.0",
+    "esm": "^3.2.25",
+    "inquirer": "^8.2.0",
+    "ncp": "^2.0.0"
+  },
+  "devDependencies": {}
+}
