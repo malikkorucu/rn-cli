@@ -1,8 +1,8 @@
-const ncp = require("ncp");
-const fs = require("fs");
-const path = require("path");
-const { promisify } = require("util");
-const colors = require("colors");
+import ncp from "ncp";
+import fs from "fs";
+import path from "path";
+import { promisify } from "util";
+import colors from "colors";
 import os from 'os';
 
 const access = promisify(fs.access);

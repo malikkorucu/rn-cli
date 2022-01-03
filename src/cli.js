@@ -3,7 +3,6 @@ import inquirer from "inquirer";
 import { createProject } from "./main.js";
 import ora from 'ora';
 
-
 function pasteArgumentsIntoOptions (rawArgs){
   const args = arg(
     {
