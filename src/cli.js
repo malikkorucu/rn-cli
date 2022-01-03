@@ -1,6 +1,8 @@
 import arg from "arg";
 import inquirer from "inquirer";
 import { createProject } from "./main.js";
+import ora from 'ora';
+
 
 function pasteArgumentsIntoOptions (rawArgs){
   const args = arg(
@@ -65,5 +67,11 @@ async function promptForMissingOptions (options){
 export async function cli(args){
   let options = pasteArgumentsIntoOptions(args);
   options = await promptForMissingOptions(options);
-  await createProject(options)
+
+  const spinner = ora('Loading ...').start();
+
+  setTimeout(async()=> {
+    await createProject(options)
+    spinner.stop();
+  },3000)
 };

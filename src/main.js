@@ -2,7 +2,8 @@ const ncp = require("ncp");
 const fs = require("fs");
 const path = require("path");
 const { promisify } = require("util");
-var colors = require("colors");
+const colors = require("colors");
+import os from 'os';
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
@@ -20,11 +21,13 @@ export async function createProject(options) {
   };
 
   const currentFileUrl = import.meta.url;
-  const templateDir = path.resolve(
+  let templateDir = path.resolve(
     new URL(currentFileUrl).pathname,
     "../../templates",
     options.template.toLowerCase()
-  ).slice(3)
+  )
+
+  if(os.platform() === 'win32') templateDir = templateDir.slice(3)
 
   options.templateDirectory = templateDir;
 
@@ -38,6 +41,6 @@ export async function createProject(options) {
   console.log("Copy project files");
   await copyTemplateFiles(options);
 
-  console.log("%s Project ready", colors.green.underline("DONE"));
+  console.log("%s Project ready", colors.green.bgGreen.underline("DONE"));
   return true;
 }
