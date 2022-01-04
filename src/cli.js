@@ -20,6 +20,7 @@ function pasteArgumentsIntoOptions (rawArgs){
     skipPrompts: args["--yes"] || false,
     git: args["--git"] || false,
     template: args._[0],
+    name:args._[1],
     runInstall: args["--install"] || false,
   };
 };
@@ -46,6 +47,15 @@ async function promptForMissingOptions (options){
     });
   }
 
+  if (!options.name) {
+    questions.push({
+      type: "input",
+      name: "name",
+      message: "What's your project name ?",
+      default: defaultTemplate,
+    });
+  }
+
   // if (!options.git) {
   //   questions.push({
   //     type: "list",
@@ -57,9 +67,11 @@ async function promptForMissingOptions (options){
 
   const answers = await inquirer.prompt(questions);
 
+  console.log(answers)
   return {
     ...options,
     template: options.template || answers.template,
+    name: options.name || answers.name
   };
 };
 

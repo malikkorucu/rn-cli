@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "udpate": "npm unlink && npm link"
+    "link": "npm unlink && npm link"
   },
   "repository": {
     "type": "git",
@@ -28,8 +28,12 @@
     "chalk": "^5.0.0",
     "colors": "^1.4.0",
     "esm": "^3.2.25",
+    "execa": "^6.0.0",
     "inquirer": "^8.2.0",
+    "listr": "^0.14.3",
     "ncp": "^2.0.0",
-    "ora": "^5.4.1"
+    "node-cmd": "^5.0.0",
+    "ora": "^5.4.1",
+    "pkg-install": "^1.0.0"
   }
 }
