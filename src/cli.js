@@ -1,9 +1,11 @@
 import arg from "arg";
 import inquirer from "inquirer";
+import ora from "ora";
+import fs from "fs";
+import path from "path";
 import { createProject } from "./main.js";
-import ora from 'ora';
 
-function pasteArgumentsIntoOptions (rawArgs){
+function pasteArgumentsIntoOptions(rawArgs) {
   const args = arg(
     {
       "--git": Boolean,
@@ -18,14 +20,15 @@ function pasteArgumentsIntoOptions (rawArgs){
 
   return {
     skipPrompts: args["--yes"] || false,
+    action: args._[0] || "create-project",
     git: args["--git"] || false,
-    template: args._[0],
-    name:args._[1],
+    template: args._[1],
+    name: args._[2],
     runInstall: args["--install"] || false,
   };
-};
+}
 
-async function promptForMissingOptions (options){
+async function promptForMissingOptions(options) {
   const defaultTemplate = "ReactNative";
 
   if (options.skipPrompts) {
@@ -41,7 +44,7 @@ async function promptForMissingOptions (options){
     questions.push({
       type: "list",
       name: "template",
-      message: "please choose whic project ?",
+      message: "please choose which project ?",
       choices: ["React", "ReactNative"],
       default: defaultTemplate,
     });
@@ -67,22 +70,20 @@ async function promptForMissingOptions (options){
 
   const answers = await inquirer.prompt(questions);
 
-  console.log(answers)
+  console.log(answers);
   return {
     ...options,
     template: options.template || answers.template,
-    name: options.name || answers.name
+    name: options.name || answers.name,
   };
-};
+}
 
-export async function cli(args){
+export async function cli(args) {
   let options = pasteArgumentsIntoOptions(args);
   options = await promptForMissingOptions(options);
 
-  const spinner = ora('Loading ...').start();
-
-  setTimeout(async()=> {
-    await createProject(options)
-    spinner.stop();
-  },3000)
-};
+  const spinner = ora("Loading ...").start();
+  
+  await createProject(options);
+  spinner.stop();
+}

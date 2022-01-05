@@ -7,27 +7,57 @@ import os from "os";
 import Listr from "listr";
 import { projectInstall } from "pkg-install";
 import cmd from "node-cmd";
-import ora from 'ora';
+import ora from "ora";
+import { paths } from "./constant/paths";
+
+let CONST = "";
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
 
-async function copyTemplateFiles(options) {
-  const spinner = ora('React Native project initializing ...').start();
+async function initProjectFromGit(options) {
+  console.log(CONST.templateDir);
+  console.log(CONST.targetDir);
+  console.log(CONST.projectDir);
+
+  const spinner = ora("React Native project initializing ...").start();
+  const target_dir = CONST.targetDir;
+
   cmd.run(
-    `cd ${options.targetDirectory} && npx react-native init ${options.name} --template react-native-template-typescript`,
-    function (err, data, stderr) {
-      console.log(
-        "examples dir now contains the example file along with : ",
-        data
-      );
-      spinner.stop()
+    `cd ${target_dir} && npx react-native init ${options.name} --template react-native-template-typescript`,
+    async function (err, data, stderr) {
+      await copyTemplateFiles();
+      await integrateFiles(options);
+      spinner.stop();
     }
   );
+}
 
-  return copy(options.templateDirectory, options.targetDirectory, {
-    clobber: false,
+async function copyTemplateFiles() {
+  console.log("template", CONST.templateDir);
+  console.log("project", CONST.projectDir);
+
+  await copy(CONST.templateDir, CONST.projectDir, {
+    clobber: true,
   });
+}
+
+async function integrateFiles(options) {
+  const settings_gradle_data = fs
+    .readFileSync(CONST.TEMP_SETTINGS_GRADLE)
+    .toString()
+    .split("\n");
+
+  settings_gradle_data.splice(0, 0, `rootProject.name = '${options.name}'`);
+  let last_data = settings_gradle_data.join("\n");
+
+  fs.writeFileSync(
+    path.resolve(CONST.PROJECT_SETTINGS_GRADLE),
+    last_data,
+    () => {
+      console.log("aa");
+    }
+  );
 }
 
 async function initProject(options) {
@@ -37,49 +67,42 @@ async function initProject(options) {
 }
 
 export async function createProject(options) {
-  options = {
-    ...options,
-    targetDirectory: options.targetDirectory || process.cwd(),
-  };
-
-  const currentFileUrl = import.meta.url;
-  let templateDir = path.resolve(
-    new URL(currentFileUrl).pathname,
-    "../../templates",
-    options.template.toLowerCase()
-  );
-
-  if (os.platform() === "win32") templateDir = templateDir.slice(3);
-
-  options.templateDirectory = templateDir;
+  CONST = paths(options);
+  console.log(CONST.TEMP_SETTINGS_GRADLE , CONST.PROJECT_SETTINGS_GRADLE)
 
   try {
-    await access(templateDir, fs.constants.R_OK);
+    await access(CONST.templateDir, fs.constants.R_OK);
   } catch (error) {
     console.error("%s Invalid project name", colors.red.underline("ERROR"));
     process.exit(1);
   }
 
-  const tasks = new Listr([
-    {
-      title: "Copy project files",
-      task: () => copyTemplateFiles(options),
-    },
-    // {
-    //   title: "Initialize git",
-    //   task:() => initGit(options)
-    // }
-    {
-      title: "Install dependencies",
-      task: () =>
-        projectInstall({
-          pwd: options.targetDirectory,
-        }),
-    },
-  ]);
+  initProjectFromGit(options);
 
-  await tasks.run();
+  // const tasks = new Listr([
+  //   {
+  //     title: "İnitialize",
+  //     task: () => initProjectFromGit(options),
+  //   },
+  //   // {
+  //   //   title: "Integrations",
+  //   //   task: () => integrateFiles(options),
+  //   // },
+  //   // {
+  //   //   title: "Initialize git",
+  //   //   task:() => initGit(options)
+  //   // // }
+  //   // {
+  //   //   title: "Install dependencies",
+  //   //   task: () =>
+  //   //     projectInstall({
+  //   //       pwd: options.targetDirectory,
+  //   //     }),
+  //   // },
+  // ]);
 
-  console.log("%s Project ready", colors.green.bgGreen.underline("DONE"));
+  // await tasks.run();
+
+  // console.log("%s Project ready", colors.green.bgGreen.underline("DONE"));
   return true;
 }
