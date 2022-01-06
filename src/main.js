@@ -8,101 +8,138 @@ import Listr from "listr";
 import { projectInstall } from "pkg-install";
 import cmd from "node-cmd";
 import ora from "ora";
-import { paths } from "./constant/paths";
-
-let CONST = "";
+import { addTopOfFile } from "./utils/files";
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
 
-async function initProjectFromGit(options) {
-  console.log(CONST.templateDir);
-  console.log(CONST.targetDir);
-  console.log(CONST.projectDir);
-
-  const spinner = ora("React Native project initializing ...").start();
-  const target_dir = CONST.targetDir;
-
-  cmd.run(
-    `cd ${target_dir} && npx react-native init ${options.name} --template react-native-template-typescript`,
-    async function (err, data, stderr) {
-      await copyTemplateFiles();
-      await integrateFiles(options);
-      spinner.stop();
-    }
-  );
-}
-
-async function copyTemplateFiles() {
-  console.log("template", CONST.templateDir);
-  console.log("project", CONST.projectDir);
-
-  await copy(CONST.templateDir, CONST.projectDir, {
-    clobber: true,
-  });
-}
-
-async function integrateFiles(options) {
-  const settings_gradle_data = fs
-    .readFileSync(CONST.TEMP_SETTINGS_GRADLE)
-    .toString()
-    .split("\n");
-
-  settings_gradle_data.splice(0, 0, `rootProject.name = '${options.name}'`);
-  let last_data = settings_gradle_data.join("\n");
-
-  fs.writeFileSync(
-    path.resolve(CONST.PROJECT_SETTINGS_GRADLE),
-    last_data,
-    () => {
-      console.log("aa");
-    }
-  );
-}
-
-async function initProject(options) {
-  if (result.failed) {
-    return Promise.reject(new Error("Failed to initialize project"));
-  }
-}
-
-export async function createProject(options) {
-  CONST = paths(options);
-  console.log(CONST.TEMP_SETTINGS_GRADLE , CONST.PROJECT_SETTINGS_GRADLE)
-
-  try {
-    await access(CONST.templateDir, fs.constants.R_OK);
-  } catch (error) {
-    console.error("%s Invalid project name", colors.red.underline("ERROR"));
-    process.exit(1);
+export class Main {
+  constructor(paths) {
+    this.CONST = paths;
   }
 
-  initProjectFromGit(options);
+  async createProject(options) {
+    const { templateDir } = this.CONST;
 
-  // const tasks = new Listr([
-  //   {
-  //     title: "İnitialize",
-  //     task: () => initProjectFromGit(options),
-  //   },
-  //   // {
-  //   //   title: "Integrations",
-  //   //   task: () => integrateFiles(options),
-  //   // },
-  //   // {
-  //   //   title: "Initialize git",
-  //   //   task:() => initGit(options)
-  //   // // }
-  //   // {
-  //   //   title: "Install dependencies",
-  //   //   task: () =>
-  //   //     projectInstall({
-  //   //       pwd: options.targetDirectory,
-  //   //     }),
-  //   // },
-  // ]);
+    try {
+      await access(templateDir, fs.constants.R_OK);
+    } catch (error) {
+      console.error("%s Invalid project name", colors.red.underline("ERROR"));
+      process.exit(1);
+    }
 
-  // await tasks.run();
+    this.initProjectFromGit(options);
 
-  // console.log("%s Project ready", colors.green.bgGreen.underline("DONE"));
-  return true;
+    return true;
+  }
+
+  async initProjectFromGit(options) {
+    const { targetDir } = this.CONST;
+
+    const spinner = ora("React Native project initializing ...").start();
+    const target_dir = targetDir;
+
+    cmd.run(
+      `cd ${target_dir} && npx react-native init ${options.name} --template react-native-template-typescript`,
+      async (err, data, stderr) => {
+        await this.copyTemplateFiles();
+        await this.integrateFiles(options);
+        cmd.run(`npx react-native run-android`)
+        spinner.stop();
+      }
+    );
+  }
+
+  async copyTemplateFiles() {
+    const { templateDir, projectDir } = this.CONST;
+
+    await copy(templateDir, projectDir, {
+      clobber: true,
+    });
+
+    this.installDependencies();
+  }
+
+  async integrateFiles(options) {
+    const {
+      TEMP_SETTINGS_GRADLE,
+      PROJECT_SETTINGS_GRADLE,
+      TEMP_MAIN_ACTIVITY_JAVA,
+      PROJECT_MAIN_ACTIVITY_JAVA,
+      PROJECT_BUILD_GRADLE,
+      TEMP_BUILD_GRADLE,
+      TEMP_MAIN_APPLICATION_JAVA,
+      PROJECT_MAIN_APPLICATION_JAVA,
+      TEMP_PACKAGE_JSON,
+      PROJECT_PACKAGE_JSON,
+      TEMP_APP_JSON,
+      PROJECT_APP_JSON,
+      name,
+    } = this.CONST;
+
+    // settings.gradle
+    const settingsGradLe = fs
+      .readFileSync(TEMP_SETTINGS_GRADLE)
+      .toString()
+      .replace(/%.*%/, name); // Project name
+
+    fs.writeFileSync(path.resolve(PROJECT_SETTINGS_GRADLE), settingsGradLe);
+
+    // MainActivity.java
+    const mainActivityJava = fs
+      .readFileSync(TEMP_MAIN_ACTIVITY_JAVA)
+      .toString()
+      .replace(/%lc%.*%lc%/, name.toLowerCase())
+      .replace(/%.*%/, name);
+
+    fs.writeFileSync(
+      path.resolve(PROJECT_MAIN_ACTIVITY_JAVA),
+      mainActivityJava
+    );
+
+    // mainApplication.java
+    const mainApplicationJava = fs
+      .readFileSync(TEMP_MAIN_APPLICATION_JAVA)
+      .toString()
+      .replace(/%.*%/g, name.toLowerCase());
+
+    fs.writeFileSync(
+      path.resolve(PROJECT_MAIN_APPLICATION_JAVA),
+      mainApplicationJava
+    );
+
+    // build.gradle
+    const buildGradle = fs
+      .readFileSync(TEMP_BUILD_GRADLE)
+      .toString()
+      .replace(/%.*%/g, name.toLowerCase());
+
+    fs.writeFileSync(path.resolve(PROJECT_BUILD_GRADLE), buildGradle);
+
+    // package.json
+    const packageJson = fs
+      .readFileSync(TEMP_PACKAGE_JSON)
+      .toString()
+      .replace(/%.*%/g, name.toLowerCase());
+
+    fs.writeFileSync(path.resolve(PROJECT_PACKAGE_JSON), packageJson);
+
+    //app.json
+    const appJson = fs
+      .readFileSync(TEMP_APP_JSON)
+      .toString()
+      .replace(/%.*%/g, name);
+
+    fs.writeFileSync(path.resolve(PROJECT_APP_JSON), appJson);
+  }
+
+  installDependencies() {
+    const { name } = this.CONST;
+    var spinner = ora("Packages are installing please wait...").start();
+    cmd.run(`cd ${name} && npm install && cd ..`, () => {
+      spinner.succeed();
+    });
+  }
+
+  test() {}
 }
