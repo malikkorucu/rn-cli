@@ -3,12 +3,8 @@ import fs from "fs";
 import path from "path";
 import { promisify } from "util";
 import colors from "colors";
-import os from "os";
-import Listr from "listr";
-import { projectInstall } from "pkg-install";
 import cmd from "node-cmd";
 import ora from "ora";
-import { addTopOfFile } from "./utils/files";
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
@@ -42,22 +38,20 @@ export class Main {
     cmd.run(
       `cd ${target_dir} && npx react-native init ${options.name} --template react-native-template-typescript`,
       async (err, data, stderr) => {
-        await this.copyTemplateFiles();
-        await this.integrateFiles(options);
-        cmd.run(`npx react-native run-android`)
+        await this.copyTemplateFiles(options);
         spinner.stop();
       }
     );
   }
 
-  async copyTemplateFiles() {
+  async copyTemplateFiles(options) {
     const { templateDir, projectDir } = this.CONST;
 
     await copy(templateDir, projectDir, {
       clobber: true,
     });
 
-    this.installDependencies();
+    await this.installDependencies(options);
   }
 
   async integrateFiles(options) {
@@ -74,6 +68,10 @@ export class Main {
       PROJECT_PACKAGE_JSON,
       TEMP_APP_JSON,
       PROJECT_APP_JSON,
+      TEMP_PODFILE,
+      PROJECT_PODFILE,
+      PROJECT_INFO_PLIST,
+      TEMP_INFO_PLIST,
       name,
     } = this.CONST;
 
@@ -131,15 +129,49 @@ export class Main {
       .replace(/%.*%/g, name);
 
     fs.writeFileSync(path.resolve(PROJECT_APP_JSON), appJson);
+
+    //info.plist
+    const infoPlist = fs
+      .readFileSync(TEMP_INFO_PLIST)
+      .toString()
+      .replace(/%lc%.*%lc%/g, name.toLowerCase())
+      .replace(/%.*%/g, name);
+
+    fs.writeFileSync(path.resolve(PROJECT_INFO_PLIST), infoPlist);
+
+    this.copyPasteFontFiles();
+
+    //Podfile
+    const podfile = fs
+      .readFileSync(TEMP_PODFILE)
+      .toString()
+      .replace(/%.*%/g, name);
+
+    fs.writeFileSync(path.resolve(PROJECT_PODFILE), podfile);
   }
 
-  installDependencies() {
+  async installDependencies(options) {
     const { name } = this.CONST;
     var spinner = ora("Packages are installing please wait...").start();
-    cmd.run(`cd ${name} && npm install && cd ..`, () => {
+    cmd.run(`cd ${name} && npm install --save && cd ..`, async () => {
       spinner.succeed();
+      await this.integrateFiles(options);
+    });
+    return true;
+  }
+
+  async copyPasteFontFiles() {
+    const { TEMP_FONTS_FILE, PROJECT_FONTS_FILE } = this.CONST;
+    var targetFolder = path.join(PROJECT_FONTS_FILE, path.basename("fonts"));
+
+    if (!fs.existsSync(targetFolder)) {
+      fs.mkdirSync(targetFolder);
+    }
+
+    await copy(TEMP_FONTS_FILE, targetFolder, {
+      clobber: true,
     });
   }
 
-  test() {}
+  async test() {}
 }

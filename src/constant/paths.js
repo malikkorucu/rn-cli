@@ -22,6 +22,15 @@ return {
      PROJECT_APP_JSON: path.resolve(projectDir , `./app.json`),
      TEMP_PACKAGE_JSON: path.resolve(contentsDir , `./package.json`),
      PROJECT_PACKAGE_JSON: path.resolve(projectDir , `./package.json`),
+     
+     TEMP_PODFILE: path.resolve(contentsDir , `./Podfile`),
+     PROJECT_PODFILE: path.resolve(projectDir , `./ios/Podfile`),
+     TEMP_FONTS_FILE: path.resolve(contentsDir , `./fonts`),
+     PROJECT_FONTS_FILE: path.resolve(projectDir , `./ios/`),
+     TEMP_INFO_PLIST: path.resolve(contentsDir , `./Info.plist`),
+     PROJECT_INFO_PLIST: path.resolve(projectDir , `./ios/${options.name}/Info.plist`),
+     TEMP_PROJECT_PBXPROJ: path.resolve(contentsDir , `./project.pbxproj`),
+     PROJECT_PROJECT_PBXPROJ: path.resolve(projectDir , `./ios/${options.name}.xcodeproj/project.pbxproj`),
      ...options
  }
 }
