@@ -161,17 +161,29 @@ export class Main {
   }
 
   async copyPasteFontFiles() {
-    const { TEMP_FONTS_FILE, PROJECT_FONTS_FILE } = this.CONST;
-    var targetFolder = path.join(PROJECT_FONTS_FILE, path.basename("fonts"));
+    const { TEMP_FONTS_FILE, PROJECT_FONTS_FILE_IOS,PROJECT_FONTS_FILE_ANDROID } = this.CONST;
+    var targetFolderIos = path.join(PROJECT_FONTS_FILE_IOS, path.basename("fonts"));
+    let targetFolderAndroid = path.join(PROJECT_FONTS_FILE_ANDROID, path.basename("assets"));
+    let targetFolderFontsAndroid;
 
-    if (!fs.existsSync(targetFolder)) {
-      fs.mkdirSync(targetFolder);
+    if (!fs.existsSync(targetFolderIos)) {
+      fs.mkdirSync(targetFolderIos);
     }
 
-    await copy(TEMP_FONTS_FILE, targetFolder, {
+    if(!fs.existsSync(targetFolderAndroid)){
+      fs.mkdirSync(targetFolderAndroid);
+      targetFolderFontsAndroid = path.join(targetFolderAndroid , path.basename('fonts'))
+    }
+
+    await copy(TEMP_FONTS_FILE, targetFolderFontsAndroid, {
+      clobber: true,
+    });
+
+    await copy(TEMP_FONTS_FILE, targetFolderIos, {
       clobber: true,
     });
   }
 
-  async test() {}
+  async test() {
+  }
 }
