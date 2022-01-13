@@ -1,4 +1,4 @@
-import { HomeScreen } from './../../../screens/Home/HomeScreen';
+import { HomeScreen } from '../../../screens/Home/HomeScreen';
 import { HomeDetail } from "../../../screens/HomeDetail/HomeDetail";
 import { IScreen } from '../Models/IScreen';
 

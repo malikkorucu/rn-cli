@@ -15,13 +15,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faCoffee,
-  faTrash,
-  faUser,
-  faList,
-  faReply,
-} from '@fortawesome/free-solid-svg-icons';
 import Svg, {Path} from 'react-native-svg';
 //@ts-ignore
 import * as shape from 'd3-shape';

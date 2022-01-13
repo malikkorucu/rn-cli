@@ -13,6 +13,8 @@ import java.util.List;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.react.bridge.JSIModulePackage;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
+import com.airbnb.android.react.lottie.LottiePackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 
 public class MainApplication extends Application implements ReactApplication {

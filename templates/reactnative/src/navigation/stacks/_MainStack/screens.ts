@@ -1,5 +1,5 @@
 import { SplashScreen } from "../../../screens/SplashScreen/SplashScreen";
-import { BottomTabNavigation } from './../../bottom-tab/BottomTabNavigation';
+import { BottomTabNavigation } from '../../bottom-tab/BottomTabNavigation';
 import { DrawerMenuNavigaiton } from '../../drawer/DrawerMenuNavigation';
 
 const Screens = [

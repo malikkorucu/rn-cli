@@ -192,6 +192,10 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    
+    compile project(':lottie-react-native')
+
+    implementation project(':react-native-splash-screen')
    
     implementation project(':@react-native-async-storage')
 

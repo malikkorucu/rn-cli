@@ -13,28 +13,19 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-  withSequence,
   useAnimatedGestureHandler,
   withDecay,
   withRepeat,
   withTiming,
-  FadeIn,
-  BounceInUp,
-  BounceOutUp,
   SlideInLeft,
   SlideOutLeft,
-  combineTransition,
-  Transition,
   Layout,
 } from 'react-native-reanimated';
-import AnimationName from 'react-native-reanimated';
-import createAnimatedComponent from 'react-native-reanimated';
 
 import {PanGestureHandler} from 'react-native-gesture-handler';
 import {FlatList} from '@components';
 
 export const AboutScreen: FC<any> = ({navigation}) => {
-  const [progress, setProgress] = useState(false);
   const [data, setData] = useState([1, 2, 3]);
   const sharedValue = useSharedValue(0);
   const offset = useSharedValue(0);

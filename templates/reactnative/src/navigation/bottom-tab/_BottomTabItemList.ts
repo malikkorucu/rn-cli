@@ -1,7 +1,7 @@
 import { faCoffee, faHome } from '@fortawesome/free-solid-svg-icons';
 import { TestScreen } from '../../screens/Test/Test';
 import { AboutScreen } from '../../screens/About/AboutScreen';
-import HomeStack from './../stacks/HomeStack/index';
+import HomeStack from '../stacks/HomeStack/index';
 
 export const BottomTabItemList = [
     {

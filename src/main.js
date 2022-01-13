@@ -54,7 +54,7 @@ export class Main {
     await this.installDependencies(options);
   }
 
-  async integrateFiles(options) {
+  async integrateFiles() {
     const {
       TEMP_SETTINGS_GRADLE,
       PROJECT_SETTINGS_GRADLE,
