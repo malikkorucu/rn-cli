@@ -7,6 +7,7 @@ import {DateTimePicker} from './../../components/DateTimePicker/DateTimePicker';
 import BottomSheet from './../../components/BottomSheet/BottomSheet';
 import {CollapsibleView, AccordionList} from '@components';
 import { showToast } from '../../utils/ToastMessage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const HomeScreen: FC<any> = () => {
   const navigation: any = useNavigation();

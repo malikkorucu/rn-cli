@@ -10,11 +10,13 @@ import { MountingUnmounting } from '../../Animation/LayoutReanimation/MountingUn
 import { NativeModals } from '../../Animation/LayoutReanimation/NativeModals';
 import { SpringLayoutAnimation } from '../../Animation/LayoutReanimation';
 import { WaterfallGridExample } from '../../Animation/LayoutReanimation/WaterfallGridExample';
+import LiquidSwipe from '../../components/LiquidSwipe';
 
 export const TestScreen = () => {
   return (
     <View style={{flex: 1}}>
       <Text>Test page</Text>
+      <LiquidSwipe/>
     </View>
   );
 };
