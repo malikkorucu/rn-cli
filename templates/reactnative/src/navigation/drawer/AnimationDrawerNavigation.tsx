@@ -51,10 +51,10 @@ const DrawerContent = (props: any) => {
       scrollEnabled={false}
       contentContainerStyle={{flex: 1}}>
       <View style={{flex: 1}}>
-        <View style={{flex: 0.4, margin: 20}}>
+        <View style={{flex: 0.1, margin: 20}}>
           <Image
             source={{
-              uri: 'https://react-ui-kit.com/assets/img/react-ui-kit-logo-green.png',
+              uri: 'https://image.com/image.png',
               height: 60,
               width: 60,
               scale: 0.5,
@@ -62,27 +62,22 @@ const DrawerContent = (props: any) => {
             resizeMode="center"
             style={styles.avatar}
           />
-          <Text>React UI Kit</Text>
-          <Text>contact@react-ui-kit.com</Text>
         </View>
         <View style={{flex: 1}}>
           <DrawerItem
             label="Dashboard"
-            labelStyle={styles.drawerLabel}
             style={styles.drawerItem}
             onPress={() => props.navigation.navigate('Home')}
           />
           <DrawerItem
-            label="Messages"
-            labelStyle={{color: 'white', marginLeft: -16}}
-            style={{alignItems: 'flex-start', marginVertical: 0}}
-            onPress={() => props.navigation.navigate('Messages')}
+            label="Dashboard"
+            style={styles.drawerItem}
+            onPress={() => props.navigation.navigate('Home')}
           />
           <DrawerItem
-            label="Contact us"
-            labelStyle={{color: 'white', marginLeft: -16}}
-            style={{alignItems: 'flex-start', marginVertical: 0}}
-            onPress={() => props.navigation.navigate('Contact')}
+            label="Dashboard"
+            style={styles.drawerItem}
+            onPress={() => props.navigation.navigate('Home')}
           />
         </View>
       </View>
@@ -90,7 +85,7 @@ const DrawerContent = (props: any) => {
       <View>
         <DrawerItem
           label="Logout"
-          labelStyle={{color: 'white'}}
+          labelStyle={{color: 'red'}}
           onPress={() => Alert.alert('Are your sure to logout?')}
         />
       </View>
@@ -146,12 +141,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.44,
     shadowRadius: 10.32,
     elevation: 5,
-    // overflow: 'scroll',
+    borderRadius: 14,
+    overflow: 'scroll',
     // borderWidth: 1,
   },
   drawerStyles: {flex: 1, width: '50%', backgroundColor: 'transparent'},
-  drawerItem: {alignItems: 'flex-start', marginVertical: 0},
-  drawerLabel: {color: 'white', marginLeft: -16},
+  drawerItem: {
+    backgroundColor: '#dedede',
+  },
+  drawerLabel: {marginLeft: -16},
   avatar: {
     borderRadius: 60,
     marginBottom: 16,
