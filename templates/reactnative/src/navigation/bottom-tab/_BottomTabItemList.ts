@@ -7,22 +7,22 @@ export const BottomTabItemList = [
     {
         label: 'Home',
         icon: 'Car',
-        component:HomeStack,
-        headerShown:false,
+        component: HomeStack,
+        headerShown: false,
         item: faHome,
     },
     {
         label: 'About',
         icon: 'Car',
-        component:AboutScreen,
-        headerShown:true,
+        component: AboutScreen,
+        headerShown: true,
         item: faCoffee,
     },
     {
         label: 'Test',
         icon: 'Car',
-        component:TestScreen,
-        headerShown:true,
+        component: TestScreen,
+        headerShown: true,
         item: faCoffee,
     },
 ]
