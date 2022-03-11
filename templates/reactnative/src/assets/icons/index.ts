@@ -1,9 +1,17 @@
 import React, { FC } from 'react';
 import * as svgs from "../svg/*.svg"
 import Car from './svg/car.svg'
+import Help from './svg/help.svg'
+import Search from './svg/search.svg'
+import Ticket from './svg/ticket.svg'
+import User from './svg/user.svg'
 
 const icons = {
-    Car
+    Car,
+    Help,
+    Search,
+    Ticket,
+    User
 } as any
 
 type Props = {

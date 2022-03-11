@@ -1,7 +1,8 @@
 import React, {FC, useState, useEffect} from 'react';
-import {Keyboard, View} from 'react-native';
+import {Keyboard, View, Dimensions} from 'react-native';
 import {BottomTabItem} from './BottomTabItem';
 import AnimatedTabBar from './AnimatedTabBar';
+import {color, window, bottomTabHeight} from '@theme';
 
 export const BottomTabContainer: FC<any> = props => {
   const {state, descriptors, navigation} = props;
@@ -16,16 +17,32 @@ export const BottomTabContainer: FC<any> = props => {
     };
   }, []);
 
+  const bottomTabConfig = {
+    height: bottomTabHeight,
+    fontSize: window.height < 680 ? 10 : 12,
+    iconSize: window.height < 680 ? 25 : 30
+  };
+
   return (
     <>
       {showTab && (
         <View
           style={{
-            height: 64,
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            alignItems: 'center',
+            backgroundColor: color.white,
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
             flexDirection: 'row',
+            // TODO BURAYA THEME DOSYASINDA OLUŞTURDUĞUN SIZE LARDAN KOY !
+            width: Dimensions.get('window').width,
+            height: bottomTabConfig.height,
           }}>
-          <AnimatedTabBar />
-          {/* {state.routes.map((route: any, index: number) => {
+          {/* <AnimatedTabBar /> */}
+          {state.routes.map((route: any, index: number) => {
             const {options} = descriptors[route.key];
             const label =
               options.tabBarLabel !== undefined
@@ -49,9 +66,12 @@ export const BottomTabContainer: FC<any> = props => {
                 key={index}
                 label={label}
                 onPress={onPress}
+                routesLength={state.routes}
+                currentIndex={index}
+                bottomTabConfig={bottomTabConfig}
               />
             );
-          })} */}
+          })}
         </View>
       )}
     </>

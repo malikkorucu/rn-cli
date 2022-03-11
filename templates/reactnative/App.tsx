@@ -9,33 +9,32 @@ import {PersistGate} from 'redux-persist/integration/react';
 
 const App: FC = () => {
   const toastConfig = {
-    success: (props: any) => (
-      <BaseToast
-        {...props}
-        style={{borderLeftColor: 'green'}}
-        contentContainerStyle={{paddingHorizontal: 15}}
-        text1Style={{
-          fontSize: 15,
-          fontWeight: '400',
-        }}
-        text2Style={{color: 'red'}}
-      />
+    success: ({text1, ...props}: any) => (
+      <View style={{padding: 10, width: '100%', height: 60}}>
+        <View
+          style={{
+            height: 60,
+            width: '100%',
+            backgroundColor: 'green',
+            borderRadius: 10,
+          }}>
+          <Text>{text1}</Text>
+          <Text>{props?.uuid}</Text>
+        </View>
+      </View>
     ),
-    error: (props: any) => (
-      <ErrorToast
-        {...props}
-        text1Style={{
-          fontSize: 17,
-        }}
-        text2Style={{
-          fontSize: 15,
-        }}
-      />
-    ),
-    tomatoToast: ({text1, props}: any) => (
-      <View style={{height: 60, width: '100%', backgroundColor: 'yellow'}}>
-        <Text>{text1}</Text>
-        <Text>{props?.uuid}</Text>
+    error: ({text1, ...props}: any) => (
+      <View style={{padding: 10, width: '100%', height: 60}}>
+        <View
+          style={{
+            height: 60,
+            width: '100%',
+            backgroundColor: 'red',
+            borderRadius: 10,
+          }}>
+          <Text>{text1}</Text>
+          <Text>{props?.uuid}</Text>
+        </View>
       </View>
     ),
   };

@@ -1,17 +1,13 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {HomeScreen} from '../../screens/Home/HomeScreen';
-import {AboutScreen} from '../../screens/About/AboutScreen';
 import {BottomTabContainer} from './BottomTabContainer';
-import {View, Text} from 'react-native';
-import HomeStack from '../stacks/HomeStack';
 import {BottomTabItemList} from './_BottomTabItemList';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator() as any;
 
-export const BottomTabNavigation = () => {
+export const BottomTabNavigation: FC<any> = () => {
   return (
-    <Tab.Navigator tabBar={props => <BottomTabContainer {...props} />}>
+    <Tab.Navigator tabBar={(props: any) => <BottomTabContainer {...props} />}>
       {BottomTabItemList.map((item: any) => (
         <Tab.Screen
           key={item.label}

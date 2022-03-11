@@ -1,5 +1,5 @@
-import React, {FC,useRef} from 'react';
-import {Animated, View,Easing} from 'react-native';
+import React, {FC, useRef} from 'react';
+import {Animated, View, Easing} from 'react-native';
 import {Icon} from '../../assets/icons';
 import {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -18,7 +18,6 @@ export const SplashScreen: FC = () => {
       easing: Easing.linear,
       useNativeDriver: true,
     }).start();
-
   }, []);
 
   useEffect(() => {
@@ -33,13 +32,19 @@ export const SplashScreen: FC = () => {
   }, []);
 
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+      }}>
       <LottieView
-        source={require('./loading-circles.json')}
+        source={require('./train.json')}
         progress={progress.current}
         loop={true}
         autoPlay={true}
-        style={{width: 200, height: 200}}
+        style={{width: 300, height: '100%'}}
       />
     </View>
   );
