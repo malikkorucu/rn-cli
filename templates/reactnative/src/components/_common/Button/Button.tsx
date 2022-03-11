@@ -12,7 +12,7 @@ import {color} from '@theme';
 type Props = {
   onPress: (event: GestureResponderEvent) => void;
   type: 'primary' | 'secondary';
-  disabled?: boolean;
+  disabled?: boolean | any;
   loading?: boolean;
   title: string;
 };

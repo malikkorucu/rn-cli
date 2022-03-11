@@ -5,5 +5,7 @@ import {getStyleShortcuts} from '../../../utils/StyleShortcut';
 type Props = {};
 
 export const Block: FC<Props | any> = ({children, ...props}) => {
-  return <View style={getStyleShortcuts(props)}>{children}</View>;
+  return (
+    <View style={[getStyleShortcuts(props), props.style]}>{children}</View>
+  );
 };

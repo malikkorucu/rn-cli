@@ -5,11 +5,12 @@ import layout from '../../config/layout.json';
 import {useEffect, useRef} from 'react';
 import {DateTimePicker} from './../../components/DateTimePicker/DateTimePicker';
 import BottomSheet from './../../components/BottomSheet/BottomSheet';
-import {CollapsibleView, AccordionList, Block} from '@components';
+import {CollapsibleView, AccordionList, Block, Input} from '@components';
 import {toast} from '../../utils/ToastMessage';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button as Btn, Text, Screen} from '@components';
 import {color, font} from '@theme';
+import {ExampleForm} from './../../components/Example/Form';
 
 export const HomeScreen: FC<any> = () => {
   const navigation: any = useNavigation();
@@ -35,22 +36,11 @@ export const HomeScreen: FC<any> = () => {
   return (
     <>
       <Screen px={10}>
-        <Btn
-          type="primary"
-          title="Button Title"
-          onPress={() => {
-            setLoading(true);
-            setTimeout(() => {
-              setLoading(false);
-            }, 3000);
-          }}
-          disabled={loading}
-          loading={loading}
-        />
+        <ExampleForm />
 
-        <Block>
+        {/* <Block>
           <Text ff={font.regular}>test text</Text>
-        </Block>
+        </Block> */}
         {/* <View style={{marginBottom: 5}}>
           <Button
             title="Home Detail"
@@ -79,13 +69,13 @@ export const HomeScreen: FC<any> = () => {
           closeOnPressMask>
           <Text>aslşdkfjasşldfkj</Text>
         </BottomSheet> */}
-        <Button
+        {/* <Button
           title="Toast message"
           onPress={() => {
             toast.success('success message');
             // toast.error('aşdsfkjşdslfj');
           }}
-        />
+        /> */}
       </Screen>
     </>
   );
